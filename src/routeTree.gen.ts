@@ -10,66 +10,33 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './features/home/routes/index'
-import { Route as featuresSeoRoutesSitemapRouteImport } from './features/seo/routes/sitemap'
-import { Route as featuresSeoRoutesApiDoticonRouteImport } from './features/seo/routes/api.icon'
-import { Route as featuresSeoRoutesApiDotogImageRouteImport } from './features/seo/routes/api.og-image'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const featuresSeoRoutesSitemapRoute =
-  featuresSeoRoutesSitemapRouteImport.update({
-    id: '/sitemap.xml',
-    path: '/sitemap.xml',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const featuresSeoRoutesApiDoticonRoute =
-  featuresSeoRoutesApiDoticonRouteImport.update({
-    id: '/api/icon',
-    path: '/api/icon',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const featuresSeoRoutesApiDotogImageRoute =
-  featuresSeoRoutesApiDotogImageRouteImport.update({
-    id: '/api/og-image',
-    path: '/api/og-image',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof featuresSeoRoutesSitemapRoute
-  '/api/icon': typeof featuresSeoRoutesApiDoticonRoute
-  '/api/og-image': typeof featuresSeoRoutesApiDotogImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof featuresSeoRoutesSitemapRoute
-  '/api/icon': typeof featuresSeoRoutesApiDoticonRoute
-  '/api/og-image': typeof featuresSeoRoutesApiDotogImageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof featuresSeoRoutesSitemapRoute
-  '/api/icon': typeof featuresSeoRoutesApiDoticonRoute
-  '/api/og-image': typeof featuresSeoRoutesApiDotogImageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml' | '/api/icon' | '/api/og-image'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml' | '/api/icon' | '/api/og-image'
-  id: '__root__' | '/' | '/sitemap.xml' | '/api/icon' | '/api/og-image'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  featuresSeoRoutesSitemapRoute: typeof featuresSeoRoutesSitemapRoute
-  featuresSeoRoutesApiDoticonRoute: typeof featuresSeoRoutesApiDoticonRoute
-  featuresSeoRoutesApiDotogImageRoute: typeof featuresSeoRoutesApiDotogImageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -81,36 +48,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof featuresSeoRoutesSitemapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/icon': {
-      id: '/api/icon'
-      path: '/api/icon'
-      fullPath: '/api/icon'
-      preLoaderRoute: typeof featuresSeoRoutesApiDoticonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/og-image': {
-      id: '/api/og-image'
-      path: '/api/og-image'
-      fullPath: '/api/og-image'
-      preLoaderRoute: typeof featuresSeoRoutesApiDotogImageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  featuresSeoRoutesSitemapRoute: featuresSeoRoutesSitemapRoute,
-  featuresSeoRoutesApiDoticonRoute: featuresSeoRoutesApiDoticonRoute,
-  featuresSeoRoutesApiDotogImageRoute: featuresSeoRoutesApiDotogImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
