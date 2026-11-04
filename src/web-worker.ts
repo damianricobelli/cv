@@ -1,3 +1,4 @@
+import "@/i18n/crawler-strategy";
 import { paraglideMiddleware } from "@/paraglide/server.js";
 
 const handlerPromise = import("@tanstack/react-start/server-entry");

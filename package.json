@@ -16,7 +16,7 @@
     "lint": "biome lint",
     "check": "biome check",
     "typecheck": "pnpm paraglide && tsr generate && tsc --pretty false",
-    "paraglide": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --strategy url baseLocale"
+    "paraglide": "node scripts/paraglide.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

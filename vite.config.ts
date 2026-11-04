@@ -7,6 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
+import { paraglideOptions } from "./paraglide.options.mjs";
 
 const appDirectory = fileURLToPath(new URL(".", import.meta.url));
 
@@ -62,9 +63,7 @@ export default defineConfig({
   },
   plugins: [
     paraglideVitePlugin({
-      project: "./project.inlang",
-      outdir: "./src/paraglide",
-      strategy: ["url", "baseLocale"],
+      ...paraglideOptions,
       // Physical message files, so `tsc` works without a dev server running.
       outputStructure:
         process.env.NODE_ENV === "production"
