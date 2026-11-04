@@ -91,12 +91,15 @@ export function Scheduler() {
             locale={locale === "es" ? es : enUS}
             weekStartsOn={1}
             disabled={[{ before: startOfToday() }, { dayOfWeek: [0, 6] }]}
-            className="mx-auto rounded-2xl bg-transparent p-0 [--cell-size:--spacing(10)]"
+            className="mx-auto rounded-2xl bg-transparent p-0 [--cell-size:--spacing(11)] sm:[--cell-size:--spacing(10)]"
           />
         ) : (
-          <div aria-hidden className="mx-auto h-[22.75rem] w-[17.5rem]" />
+          <div
+            aria-hidden
+            className="mx-auto h-[25rem] w-[19.25rem] sm:h-[22.75rem] sm:w-[17.5rem]"
+          />
         )}
-        <div className="grid min-h-48 content-start gap-2">
+        <div className="grid content-start gap-2 sm:min-h-48">
           <p className="font-medium text-sm first-letter:uppercase">
             {day ? shortDate.format(day) : m.contact_pick_day()}
           </p>
