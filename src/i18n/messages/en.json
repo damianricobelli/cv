@@ -134,7 +134,6 @@
   "footer_stack": "Made with TanStack Start, shadcn/ui, Motion, Three.js and Paraglide.",
   "not_found_title": "This page was never printed.",
   "not_found_back": "Or go back home",
-  "hero_eggs_hint": "There are {count} easter eggs on this site. The footer tells you how to find them.",
   "career_intro": "Nine years of work, newest first",
   "career_toggle": "Show details: {name}",
   "career_wonkka_summary": "A platform that serves a business's customers on WhatsApp: it shows real availability, takes bookings and orders, collects payment and keeps everything confirmed in one dashboard.",

@@ -2,7 +2,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
-import { EGG_IDS } from "@/features/eggs/types";
 import { ossStatsQueryOptions } from "@/features/open-source/queries/options";
 import { useFlow } from "@/features/site/components/flow-provider";
 import { formatNumber } from "@/lib/format";
@@ -87,9 +86,6 @@ export function Hero() {
           style={{ "--delay": "0.74s" } as React.CSSProperties}
         >
           <HeroCode />
-          <p className="px-1 text-muted-foreground text-sm">
-            {m.hero_eggs_hint({ count: EGG_IDS.length })}
-          </p>
         </div>
       </div>
     </section>
