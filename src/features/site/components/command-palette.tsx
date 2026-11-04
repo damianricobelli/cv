@@ -18,11 +18,12 @@ import { toast } from "sonner";
 import { useEggs } from "@/features/eggs/components/eggs-provider";
 import { useBlueprint } from "@/hooks/use-blueprint";
 import { useThemeMode } from "@/hooks/use-theme-mode";
+import { switchLocale } from "@/i18n/switch-locale";
 import { copyText } from "@/lib/clipboard";
 import { PROFILE } from "@/lib/profile";
 import { revealTransition } from "@/lib/view-transition";
 import { m } from "@/paraglide/messages";
-import { getLocale, localizeHref } from "@/paraglide/runtime";
+import { getLocale } from "@/paraglide/runtime";
 import { SECTION_IDS, SECTION_LABEL } from "../flow";
 import { useFlow } from "./flow-provider";
 
@@ -153,13 +154,7 @@ export default function CommandPalette({
                 <Command.Item
                   value="language idioma english español"
                   className={ITEM}
-                  onSelect={() =>
-                    run(() =>
-                      window.location.assign(
-                        localizeHref("/", { locale: otherLocale }),
-                      ),
-                    )
-                  }
+                  onSelect={() => run(() => switchLocale(otherLocale))}
                 >
                   <LanguagesIcon />
                   {m.palette_language()}

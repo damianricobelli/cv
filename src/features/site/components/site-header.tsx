@@ -10,10 +10,10 @@ import { useEffect, useRef, useState } from "react";
 import { Kbd } from "@/components/ui/kbd";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
-import { getLocale, localizeHref } from "@/paraglide/runtime";
 import { SECTION_IDS, SECTION_LABEL, type SectionId } from "../flow";
 import { useFlow } from "./flow-provider";
 import { GuardNotice } from "./guard-notice";
+import { LanguageSwitch } from "./language-switch";
 import { ThemeToggle } from "./theme-toggle";
 
 /** Critically damped: the pill glides to its step without overshooting. */
@@ -22,7 +22,6 @@ const PILL_SPRING = { type: "spring", duration: 0.38, bounce: 0 } as const;
 export function SiteHeader({ onOpenPalette }: { onOpenPalette: () => void }) {
   const { jump } = useFlow();
   const scrolled = useScrolled();
-  const otherLocale = getLocale() === "es" ? "en" : "es";
 
   return (
     <header
@@ -52,14 +51,7 @@ export function SiteHeader({ onOpenPalette }: { onOpenPalette: () => void }) {
         <StepRail />
 
         <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:ml-0 sm:gap-1.5">
-          <a
-            href={localizeHref("/", { locale: otherLocale })}
-            hrefLang={otherLocale}
-            aria-label={m.header_language()}
-            className="grid h-10 min-w-10 place-items-center rounded-lg px-2 font-medium font-mono text-xs transition-[background-color,scale] duration-150 ease-out hover:bg-muted active:scale-[0.97]"
-          >
-            {m.header_language_short()}
-          </a>
+          <LanguageSwitch />
           <ThemeToggle />
           <button
             type="button"

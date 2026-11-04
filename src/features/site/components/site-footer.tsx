@@ -5,6 +5,7 @@ import { useEggs } from "@/features/eggs/components/eggs-provider";
 import { EGG_COPY, EGG_IDS } from "@/features/eggs/types";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
+import { LanguageSwitch } from "./language-switch";
 
 export function SiteFooter() {
   return (
@@ -15,7 +16,10 @@ export function SiteFooter() {
           <p className="text-foreground">{m.footer_credit()}</p>
           <p>{m.footer_stack()}</p>
         </div>
-        <p className="font-mono text-xs">© {new Date().getFullYear()}</p>
+        <div className="flex items-center gap-4">
+          <LanguageSwitch />
+          <p className="font-mono text-xs">© {new Date().getFullYear()}</p>
+        </div>
       </div>
     </footer>
   );
