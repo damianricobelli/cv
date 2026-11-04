@@ -65,7 +65,7 @@ const fragmentShader = /* glsl */ `
   uniform vec2 uReliefSize;
   uniform vec2 uViewport;
   uniform float uDpr;
-  uniform vec2 uScroll;
+  uniform vec2 uOffset;
   uniform vec3 uLight;
   uniform float uIntensity;
   uniform float uRadius;
@@ -109,7 +109,7 @@ const fragmentShader = /* glsl */ `
   void main() {
     // Viewport css px with a top-left origin, then page coordinates.
     vec2 p = vec2(gl_FragCoord.x, uViewport.y * uDpr - gl_FragCoord.y) / uDpr;
-    vec2 page = p + uScroll;
+    vec2 page = p + uOffset;
 
     float e = uStep;
     vec2 slope = vec2(
@@ -188,7 +188,7 @@ export function createPaper(
     uReliefSize: { value: new Vector2(1, 1) },
     uViewport: { value: new Vector2(1, 1) },
     uDpr: { value: renderer.getPixelRatio() },
-    uScroll: { value: new Vector2() },
+    uOffset: { value: new Vector2() },
     uLight: { value: new Vector3(-1000, -1000, LIGHT_HEIGHT) },
     uIntensity: { value: 0 },
     uRadius: { value: LIGHT_RADIUS },
@@ -243,7 +243,7 @@ export function createPaper(
     uniforms.uReliefSize.value.set(layout.width, layout.height);
     // Sample a texel apart: the bevel comes from the soft strokes themselves.
     uniforms.uStep.value = 1 / scale;
-    request();
+    layoutCanvas();
   };
   let rebuildTimer = 0;
   const scheduleRebuild = () => {
@@ -353,30 +353,92 @@ export function createPaper(
       }
     }
 
-    uniforms.uLight.value.set(light.x, light.y, LIGHT_HEIGHT);
+    // The light lives in the viewport; the canvas lives in the page.
+    uniforms.uLight.value.set(
+      light.x + window.scrollX,
+      light.y + window.scrollY - band.top,
+      LIGHT_HEIGHT,
+    );
     uniforms.uIntensity.value = intensity;
-    uniforms.uScroll.value.set(window.scrollX, window.scrollY);
     renderer.render(quad, camera);
 
     if (moving) request();
     else last = 0;
   }
 
-  // ---------- sizing ----------
-  const resize = () => {
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    if (!width || !height) return;
-    renderer.setSize(width, height, false);
-    uniforms.uViewport.value.set(width, height);
-    uniforms.uDpr.value = renderer.getPixelRatio();
+  // ---------- placement ----------
+  // The canvas is not fixed to the screen: it sits in the page and scrolls
+  // with it natively, so the relief stays locked to the content (a fixed
+  // canvas redrawn on scroll always trails the compositor on phones). It
+  // covers a band a few screens tall around the viewport and only moves when
+  // the viewport nears its edge.
+  const container = canvas.parentElement ?? canvas;
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  const band = { top: 0, height: 0, width: 0 };
+  const maxPixels = Math.min(
+    renderer.capabilities.maxTextureSize,
+    renderer
+      .getContext()
+      .getParameter(renderer.getContext().MAX_RENDERBUFFER_SIZE) as number,
+    4096,
+  );
+
+  function layoutCanvas() {
+    const pageHeight = container.clientHeight;
+    const width = container.clientWidth;
+    const screen = Math.max(window.screen.height, window.innerHeight);
+    const height = Math.max(
+      1,
+      Math.min(
+        pageHeight,
+        Math.ceil(screen * (coarse ? 3 : 2)),
+        Math.floor(maxPixels / renderer.getPixelRatio()),
+      ),
+    );
+    if (width !== band.width || height !== band.height) {
+      band.width = width;
+      band.height = height;
+      renderer.setSize(width, height, false);
+      canvas.style.height = `${height}px`;
+      uniforms.uViewport.value.set(width, height);
+      uniforms.uDpr.value = renderer.getPixelRatio();
+    }
+    place(true);
     request();
+  }
+
+  /** Moves the band when the viewport gets within a quarter screen of its edge. */
+  function place(force = false) {
+    const pageHeight = container.clientHeight;
+    const view = window.innerHeight;
+    const y = window.scrollY;
+    const margin = view * 0.25;
+    const bottom = band.top + band.height;
+    const nearTop = band.top > 0 && y < band.top + margin;
+    const nearBottom = bottom < pageHeight && y + view > bottom - margin;
+    if (!force && !nearTop && !nearBottom) return false;
+    const top = Math.round(
+      Math.min(
+        Math.max(0, y + view / 2 - band.height / 2),
+        Math.max(0, pageHeight - band.height),
+      ),
+    );
+    if (top === band.top && !force) return false;
+    band.top = top;
+    canvas.style.transform = `translate3d(0, ${top}px, 0)`;
+    uniforms.uOffset.value.set(0, top);
+    return true;
+  }
+
+  const onScroll = () => {
+    // Without light the relief needs no redraw: it scrolls with the page.
+    if (place() || intensity > 0 || sweep) request();
   };
-  const canvasObserver = new ResizeObserver(resize);
-  canvasObserver.observe(canvas);
+
   // Content grows and shrinks (collapsibles, lazy sections, fonts): re-press the relief.
   const pageObserver = new ResizeObserver(scheduleRebuild);
   pageObserver.observe(document.body);
+  window.addEventListener("resize", layoutCanvas);
   const themeObserver = new MutationObserver(() => {
     applyLook();
     request();
@@ -390,10 +452,9 @@ export function createPaper(
   window.addEventListener("pointermove", onPointerMove, { passive: true });
   window.addEventListener("pointerdown", onPointerMove, { passive: true });
   window.addEventListener("touchmove", onTouchMove, { passive: true });
-  window.addEventListener("scroll", request, { passive: true });
+  window.addEventListener("scroll", onScroll, { passive: true });
   document.documentElement.addEventListener("pointerleave", onLeave);
 
-  resize();
   rebuild();
   document.fonts?.ready.then(scheduleRebuild).catch(() => {});
   if (!reducedMotion() && window.scrollY < 200 && hasFinePointer) {
@@ -405,13 +466,13 @@ export function createPaper(
     cancelAnimationFrame(frame);
     window.clearTimeout(rebuildTimer);
     window.clearTimeout(fadeTimer);
-    canvasObserver.disconnect();
     pageObserver.disconnect();
     themeObserver.disconnect();
     window.removeEventListener("pointermove", onPointerMove);
     window.removeEventListener("pointerdown", onPointerMove);
     window.removeEventListener("touchmove", onTouchMove);
-    window.removeEventListener("scroll", request);
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", layoutCanvas);
     document.documentElement.removeEventListener("pointerleave", onLeave);
     texture.dispose();
     geometry.dispose();

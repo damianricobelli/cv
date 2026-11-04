@@ -51,13 +51,19 @@ export function PaperBackground({
   }, []);
 
   return (
-    <canvas
-      ref={canvas}
+    // Page-sized and clipped: the canvas inside scrolls with the content and
+    // never makes the page taller.
+    <div
       aria-hidden
-      className={cn(
-        "pointer-events-none fixed inset-x-0 top-0 -z-10 h-lvh w-full transition-opacity duration-700",
-        ready ? "opacity-100" : "opacity-0",
-      )}
-    />
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+    >
+      <canvas
+        ref={canvas}
+        className={cn(
+          "absolute inset-x-0 top-0 w-full transition-opacity duration-700",
+          ready ? "opacity-100" : "opacity-0",
+        )}
+      />
+    </div>
   );
 }
