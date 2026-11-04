@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useEggs } from "@/features/eggs/components/eggs-provider";
+import { cn } from "@/lib/utils";
 
 const WORDS = ["Damián", "Ricobelli"] as const;
 /** On touch, tapping this many different letters in a row counts as found. */
@@ -90,11 +91,7 @@ function Letter({
       style={{ "--i": index } as React.CSSProperties}
     >
       <motion.span
-        className={
-          accent
-            ? "inline-block select-none text-a9"
-            : "inline-block select-none"
-        }
+        className={cn("inline-block select-none", accent && "text-a9")}
         drag={drag}
         dragSnapToOrigin
         dragElastic={0.55}
