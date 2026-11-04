@@ -25,7 +25,7 @@ export function ThemeToggle() {
             : { x: event.clientX, y: event.clientY };
         revealTransition(() => setThemeMode(next), origin);
       }}
-      className="relative grid size-10 shrink-0 place-items-center rounded-lg text-muted-foreground transition-[background-color,color,scale] duration-150 ease-out hover:bg-muted hover:text-foreground active:scale-[0.97]"
+      className="relative grid size-9 shrink-0 place-items-center sm:size-10 rounded-lg text-muted-foreground transition-[background-color,color,scale] duration-150 ease-out hover:bg-muted hover:text-foreground active:scale-[0.97]"
     >
       <SunIcon
         aria-hidden

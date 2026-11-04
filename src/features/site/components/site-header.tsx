@@ -34,7 +34,7 @@ export function SiteHeader({ onOpenPalette }: { onOpenPalette: () => void }) {
         "data-scrolled:shadow-[0_1px_0_var(--border)]",
       )}
     >
-      <div className="mx-auto flex h-(--header-h) max-w-6xl items-center gap-3 sm:gap-4">
+      <div className="mx-auto flex h-(--header-h) max-w-6xl items-center gap-2 sm:gap-4">
         {/* biome-ignore lint/a11y/useValidAnchor: a real link without JS; with JS it glides through the flow. */}
         <a
           href="#intro"
@@ -51,12 +51,13 @@ export function SiteHeader({ onOpenPalette }: { onOpenPalette: () => void }) {
         <StepRail />
 
         <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:ml-0 sm:gap-1.5">
-          <LanguageSwitch />
+          {/* On phones the rail needs the room: language lives in the footer and ⌘K menu there. */}
+          <LanguageSwitch className="hidden sm:flex" />
           <ThemeToggle />
           <button
             type="button"
             onClick={onOpenPalette}
-            className="flex h-10 items-center gap-2 rounded-lg border bg-card/70 px-2.5 text-muted-foreground text-sm transition-[background-color,scale] duration-150 ease-out hover:bg-card active:scale-[0.97]"
+            className="flex h-9 items-center gap-2 rounded-lg border bg-card/70 px-2 text-muted-foreground text-sm sm:h-10 sm:px-2.5 transition-[background-color,scale] duration-150 ease-out hover:bg-card active:scale-[0.97]"
           >
             <SearchIcon className="size-4" aria-hidden />
             <span className="sr-only sm:not-sr-only">{m.header_menu()}</span>
@@ -95,7 +96,7 @@ function StepRail() {
                 }
                 transition={{ duration: 0.36, ease: "easeOut" }}
                 className={cn(
-                  "group relative flex h-9 items-center gap-2 rounded-full pr-1.5 pl-1.5 text-sm transition-colors duration-200",
+                  "group relative flex h-9 items-center gap-2 rounded-full px-1 text-sm transition-colors duration-200 sm:px-1.5",
                   isActive
                     ? "pr-3.5 text-foreground"
                     : "text-muted-foreground hover:text-foreground",
