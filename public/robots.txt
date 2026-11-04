@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Share cards are under /api/ but must stay readable for link previews.
+Allow: /api/og-image
+Allow: /en/api/og-image
+Allow: /api/icon
+
+Sitemap: https://damianricobelli.com/sitemap.xml
