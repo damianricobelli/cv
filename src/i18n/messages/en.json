@@ -136,7 +136,7 @@
   "not_found_title": "This page was never printed.",
   "not_found_back": "Or go back home",
   "hero_eggs_hint": "There are {count} easter eggs on this site. The footer tells you how to find them.",
-  "career_intro": "Nine years of work, newest first. main is my experience at companies, founder holds the products I started, and oss the libraries I publish. Tap an entry for the details.",
+  "career_intro": "Nine years of work, newest first",
   "career_toggle": "Show details: {name}",
   "career_wonkka_summary": "A platform that serves a business's customers on WhatsApp: it shows real availability, takes bookings and orders, collects payment and keeps everything confirmed in one dashboard.",
   "career_wonkka_h1": "Product, design and engineering end to end",

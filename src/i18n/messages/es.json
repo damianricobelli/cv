@@ -136,7 +136,7 @@
   "not_found_title": "Esta página nunca se imprimió.",
   "not_found_back": "O volvé al inicio",
   "hero_eggs_hint": "Hay {count} easter eggs en el sitio. Al final te cuento cómo encontrarlos.",
-  "career_intro": "Nueve años de trabajo, del más reciente al primero. main es mi experiencia en empresas, founder reúne los productos que fundé y oss las librerías que publico. Tocá una entrada para ver el detalle.",
+  "career_intro": "Nueve años de trabajo, del más reciente al primero.",
   "career_toggle": "Ver detalle: {name}",
   "career_wonkka_summary": "Una plataforma que atiende a los clientes de un negocio por WhatsApp: muestra disponibilidad real, toma reservas y pedidos, cobra y deja todo confirmado en un solo panel.",
   "career_wonkka_h1": "Producto, diseño e ingeniería de punta a punta",
