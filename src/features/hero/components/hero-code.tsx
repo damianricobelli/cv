@@ -20,11 +20,6 @@ export function HeroCode() {
             "@stepperize/react"
           </span>
           {"\n\n"}
-          <span className="text-muted-foreground">
-            {"// "}
-            {m.hero_code_comment()}
-          </span>
-          {"\n"}
           <span className="text-ink">const</span> site ={" "}
           <span className="font-semibold">defineStepper</span>([
           {SECTION_IDS.map((id) => (
