@@ -1,0 +1,546 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/onest";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/bricolage-grotesque";
+
+@custom-variant dark (&:is(.dark *));
+@custom-variant blueprint (&:is(.blueprint *));
+@custom-variant data-horizontal (&[data-orientation="horizontal"]);
+@custom-variant data-vertical (&[data-orientation="vertical"]);
+
+/* Layout: one reading column (72rem) crossed by a sticky stepper; every section is a step of the flow.
+   Palette: warm cream paper, navy ink, and a Radix scale as the only accent (indigo by default). */
+
+/* ---------- accent scales (generated from @radix-ui/colors) ---------- */
+:root,
+:root[data-accent="indigo"] {
+  --accent-1: #fdfdfe;
+  --accent-2: #f7f9ff;
+  --accent-3: #edf2fe;
+  --accent-4: #e1e9ff;
+  --accent-5: #d2deff;
+  --accent-6: #c1d0ff;
+  --accent-7: #abbdf9;
+  --accent-8: #8da4ef;
+  --accent-9: #3e63dd;
+  --accent-10: #3358d4;
+  --accent-11: #3a5bc7;
+  --accent-12: #1f2d5c;
+}
+.dark,
+.dark[data-accent="indigo"] {
+  --accent-1: #11131f;
+  --accent-2: #141726;
+  --accent-3: #182449;
+  --accent-4: #1d2e62;
+  --accent-5: #253974;
+  --accent-6: #304384;
+  --accent-7: #3a4f97;
+  --accent-8: #435db1;
+  --accent-9: #3e63dd;
+  --accent-10: #5472e4;
+  --accent-11: #9eb1ff;
+  --accent-12: #d6e1ff;
+}
+:root[data-accent="blue"] {
+  --accent-1: #fbfdff;
+  --accent-2: #f4faff;
+  --accent-3: #e6f4fe;
+  --accent-4: #d5efff;
+  --accent-5: #c2e5ff;
+  --accent-6: #acd8fc;
+  --accent-7: #8ec8f6;
+  --accent-8: #5eb1ef;
+  --accent-9: #0090ff;
+  --accent-10: #0588f0;
+  --accent-11: #0d74ce;
+  --accent-12: #113264;
+}
+.dark[data-accent="blue"] {
+  --accent-1: #0d1520;
+  --accent-2: #111927;
+  --accent-3: #0d2847;
+  --accent-4: #003362;
+  --accent-5: #004074;
+  --accent-6: #104d87;
+  --accent-7: #205d9e;
+  --accent-8: #2870bd;
+  --accent-9: #0090ff;
+  --accent-10: #3b9eff;
+  --accent-11: #70b8ff;
+  --accent-12: #c2e6ff;
+}
+:root[data-accent="iris"] {
+  --accent-1: #fdfdff;
+  --accent-2: #f8f8ff;
+  --accent-3: #f0f1fe;
+  --accent-4: #e6e7ff;
+  --accent-5: #dadcff;
+  --accent-6: #cbcdff;
+  --accent-7: #b8baf8;
+  --accent-8: #9b9ef0;
+  --accent-9: #5b5bd6;
+  --accent-10: #5151cd;
+  --accent-11: #5753c6;
+  --accent-12: #272962;
+}
+.dark[data-accent="iris"] {
+  --accent-1: #13131e;
+  --accent-2: #171625;
+  --accent-3: #202248;
+  --accent-4: #262a65;
+  --accent-5: #303374;
+  --accent-6: #3d3e82;
+  --accent-7: #4a4a95;
+  --accent-8: #5958b1;
+  --accent-9: #5b5bd6;
+  --accent-10: #6e6ade;
+  --accent-11: #b1a9ff;
+  --accent-12: #e0dffe;
+}
+:root[data-accent="cyan"] {
+  --accent-1: #fafdfe;
+  --accent-2: #f2fafb;
+  --accent-3: #def7f9;
+  --accent-4: #caf1f6;
+  --accent-5: #b5e9f0;
+  --accent-6: #9ddde7;
+  --accent-7: #7dcedc;
+  --accent-8: #3db9cf;
+  --accent-9: #00a2c7;
+  --accent-10: #0797b9;
+  --accent-11: #107d98;
+  --accent-12: #0d3c48;
+}
+.dark[data-accent="cyan"] {
+  --accent-1: #0b161a;
+  --accent-2: #101b20;
+  --accent-3: #082c36;
+  --accent-4: #003848;
+  --accent-5: #004558;
+  --accent-6: #045468;
+  --accent-7: #12677e;
+  --accent-8: #11809c;
+  --accent-9: #00a2c7;
+  --accent-10: #23afd0;
+  --accent-11: #4ccce6;
+  --accent-12: #b6ecf7;
+}
+:root[data-accent="teal"] {
+  --accent-1: #fafefd;
+  --accent-2: #f3fbf9;
+  --accent-3: #e0f8f3;
+  --accent-4: #ccf3ea;
+  --accent-5: #b8eae0;
+  --accent-6: #a1ded2;
+  --accent-7: #83cdc1;
+  --accent-8: #53b9ab;
+  --accent-9: #12a594;
+  --accent-10: #0d9b8a;
+  --accent-11: #008573;
+  --accent-12: #0d3d38;
+}
+.dark[data-accent="teal"] {
+  --accent-1: #0d1514;
+  --accent-2: #111c1b;
+  --accent-3: #0d2d2a;
+  --accent-4: #023b37;
+  --accent-5: #084843;
+  --accent-6: #145750;
+  --accent-7: #1c6961;
+  --accent-8: #207e73;
+  --accent-9: #12a594;
+  --accent-10: #0eb39e;
+  --accent-11: #0bd8b6;
+  --accent-12: #adf0dd;
+}
+:root[data-accent="violet"] {
+  --accent-1: #fdfcfe;
+  --accent-2: #faf8ff;
+  --accent-3: #f4f0fe;
+  --accent-4: #ebe4ff;
+  --accent-5: #e1d9ff;
+  --accent-6: #d4cafe;
+  --accent-7: #c2b5f5;
+  --accent-8: #aa99ec;
+  --accent-9: #6e56cf;
+  --accent-10: #654dc4;
+  --accent-11: #6550b9;
+  --accent-12: #2f265f;
+}
+.dark[data-accent="violet"] {
+  --accent-1: #14121f;
+  --accent-2: #1b1525;
+  --accent-3: #291f43;
+  --accent-4: #33255b;
+  --accent-5: #3c2e69;
+  --accent-6: #473876;
+  --accent-7: #56468b;
+  --accent-8: #6958ad;
+  --accent-9: #6e56cf;
+  --accent-10: #7d66d9;
+  --accent-11: #baa7ff;
+  --accent-12: #e2ddfe;
+}
+
+:root {
+  --background: #f5f1e8;
+  --foreground: #141a2e;
+  --card: #fbf9f4;
+  --card-foreground: #141a2e;
+  --popover: #fdfbf7;
+  --popover-foreground: #141a2e;
+  --secondary: #ece6d8;
+  --secondary-foreground: #141a2e;
+  --muted: #ece7db;
+  --muted-foreground: #545c76;
+  --border: #ddd5c3;
+  --input: #d3cab6;
+  /* Step 11 alone falls under 4.5:1 on cream for the brighter scales; a touch of 12 keeps every scale legible. */
+  --accent-ink: color-mix(in oklab, var(--accent-11) 72%, var(--accent-12));
+  --primary: var(--accent-ink);
+  --primary-foreground: #fbf9f4;
+  --accent: var(--accent-3);
+  --accent-foreground: var(--accent-12);
+  --ring: var(--accent-8);
+  --destructive: #c4441c;
+  --destructive-foreground: #fff;
+  --destructive-muted: #fbe9e1;
+  --destructive-muted-foreground: #a33a17;
+  --destructive-border: #f0c2ae;
+  --success: #2b7a4b;
+  --success-foreground: #fff;
+  --success-muted: #e4f2e8;
+  --success-muted-foreground: #24683f;
+  --success-border: #b8dcc4;
+  --warning: #b86b10;
+  --warning-foreground: #fff;
+  --warning-muted: #fbf0dc;
+  --warning-muted-foreground: #8d520c;
+  --warning-border: #ecd2a2;
+  --info: var(--accent-9);
+  --info-foreground: #fff;
+  --info-muted: var(--accent-3);
+  --info-muted-foreground: var(--accent-11);
+  --info-border: var(--accent-6);
+  --radius: 0.75rem;
+  --shadow-color: 30 25% 30%;
+  --header-h: 4.25rem;
+}
+
+.dark {
+  --background: #0d111c;
+  --foreground: #ece8de;
+  --card: #131826;
+  --card-foreground: #ece8de;
+  --popover: #161c2b;
+  --popover-foreground: #ece8de;
+  --secondary: #1d2436;
+  --secondary-foreground: #ece8de;
+  --muted: #1a2132;
+  --muted-foreground: #a3abc0;
+  --border: #262e42;
+  --input: #2f3850;
+  --accent-ink: var(--accent-11);
+  --primary-foreground: #0d111c;
+  --destructive-muted: #2c1610;
+  --destructive-muted-foreground: #f1a084;
+  --destructive-border: #5a2a1a;
+  --success: #5fc48a;
+  --success-muted: #12261b;
+  --success-muted-foreground: #7fd4a2;
+  --success-border: #1f4a31;
+  --warning-muted: #2a1e0c;
+  --warning-muted-foreground: #f0b968;
+  --warning-border: #4d3713;
+  --shadow-color: 225 40% 2%;
+}
+
+/* Easter egg: the whole page as an architect's drawing, in the current accent.
+   The paper is mixed from accent-10, because accent-1…9 and 11…12 are redrawn
+   below as white ink: every tint, border and dot becomes a drawn line.
+   Matched on :root with the accent attribute too, so it outranks the
+   `:root[data-accent=…]` scales when the visitor has picked an accent. */
+:root.blueprint,
+:root.blueprint[data-accent] {
+  --background: color-mix(in oklab, var(--accent-10) 78%, #050a1a);
+  --foreground: #f4f7ff;
+  --card: color-mix(in oklab, var(--accent-10) 70%, #050a1a);
+  --card-foreground: #f4f7ff;
+  --popover: color-mix(in oklab, var(--accent-10) 62%, #050a1a);
+  --popover-foreground: #f4f7ff;
+  --secondary: rgb(255 255 255 / 0.12);
+  --secondary-foreground: #f4f7ff;
+  --muted: rgb(255 255 255 / 0.1);
+  --muted-foreground: rgb(244 247 255 / 0.78);
+  --border: rgb(255 255 255 / 0.28);
+  --input: rgb(255 255 255 / 0.36);
+  --accent-ink: #ffffff;
+  --primary-foreground: color-mix(in oklab, var(--accent-10) 78%, #050a1a);
+  --accent: rgb(255 255 255 / 0.12);
+  --accent-foreground: #fff;
+  --accent-1: rgb(255 255 255 / 0.04);
+  --accent-2: rgb(255 255 255 / 0.07);
+  --accent-3: rgb(255 255 255 / 0.13);
+  --accent-4: rgb(255 255 255 / 0.18);
+  --accent-5: rgb(255 255 255 / 0.24);
+  --accent-6: rgb(255 255 255 / 0.32);
+  --accent-7: rgb(255 255 255 / 0.48);
+  --accent-8: rgb(255 255 255 / 0.64);
+  --accent-9: #ffffff;
+  --accent-11: rgb(255 255 255 / 0.88);
+  --accent-12: #ffffff;
+  --success: #c4f5d6;
+  --success-muted: rgb(196 245 214 / 0.12);
+  --success-muted-foreground: #c4f5d6;
+  --success-border: rgb(196 245 214 / 0.4);
+  --warning: #ffd88a;
+  --warning-foreground: #1a1405;
+  --warning-muted: rgb(255 216 138 / 0.14);
+  --warning-muted-foreground: #ffe2a6;
+  --warning-border: rgb(255 216 138 / 0.45);
+  --ring: #fff;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --font-sans: "Onest Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: "Bricolage Grotesque Variable", "Onest Variable", ui-sans-serif, sans-serif;
+  --font-heading: var(--font-display);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-muted: var(--destructive-muted);
+  --color-destructive-muted-foreground: var(--destructive-muted-foreground);
+  --color-destructive-border: var(--destructive-border);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-muted: var(--success-muted);
+  --color-success-muted-foreground: var(--success-muted-foreground);
+  --color-success-border: var(--success-border);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-muted: var(--warning-muted);
+  --color-warning-muted-foreground: var(--warning-muted-foreground);
+  --color-warning-border: var(--warning-border);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-muted: var(--info-muted);
+  --color-info-muted-foreground: var(--info-muted-foreground);
+  --color-info-border: var(--info-border);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ink: var(--accent-ink);
+  --color-a3: var(--accent-3);
+  --color-a4: var(--accent-4);
+  --color-a5: var(--accent-5);
+  --color-a6: var(--accent-6);
+  --color-a7: var(--accent-7);
+  --color-a8: var(--accent-8);
+  --color-a9: var(--accent-9);
+  --color-a11: var(--accent-11);
+  --color-a12: var(--accent-12);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.08), 0 1px 1px hsl(var(--shadow-color) / 0.04);
+  --shadow-md: 0 1px 2px hsl(var(--shadow-color) / 0.06), 0 6px 16px -6px hsl(var(--shadow-color) / 0.18);
+  --shadow-lg: 0 2px 4px hsl(var(--shadow-color) / 0.06), 0 22px 48px -18px hsl(var(--shadow-color) / 0.32);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply bg-background;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 1.5rem);
+    transition: background-color 300ms ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* No background on body: <html> paints the paper, and the embossed canvas
+     (fixed, z-index -1) has to sit between the two. */
+  body {
+    @apply font-sans text-foreground antialiased;
+    position: relative;
+    overflow-x: clip;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  /* The page is a document: pull-to-refresh is fine, but the canvas and sheets keep their own scroll. */
+  button,
+  a,
+  [role="button"],
+  [role="tab"],
+  summary {
+    touch-action: manipulation;
+  }
+  button,
+  [role="button"],
+  [role="tab"] {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* iOS zooms into inputs under 16px and never zooms back out. */
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+
+  ::selection {
+    background: var(--accent-5);
+    color: var(--accent-12);
+  }
+
+  .blueprint ::selection {
+    background: #fff;
+    color: var(--background);
+  }
+}
+
+/* ---------- display type: tracking tightens as size grows ---------- */
+@utility font-display-tight {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+}
+
+@utility text-balance-pretty {
+  text-wrap: balance;
+}
+
+/* Blueprint: a faint drafting grid, and every block outlined like a technical drawing. */
+.blueprint body {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.07) 1px, transparent 1px),
+    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+}
+.blueprint [data-bp] {
+  outline: 1px dashed rgb(255 255 255 / 0.45);
+  outline-offset: 8px;
+  position: relative;
+}
+.blueprint [data-bp]::after {
+  content: attr(data-bp);
+  position: absolute;
+  top: -1.6rem;
+  left: 0;
+  font: 500 11px/1.4 var(--font-mono);
+  color: #fff;
+  background: var(--background);
+  padding: 0 0.3rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* View transitions: theme, accent and blueprint changes reveal as a circle from the pointer. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  [data-material] {
+    backdrop-filter: none !important;
+    background: var(--background) !important;
+  }
+}
+
+/* ---------- hero entrance: CSS so it plays before hydration and off the main thread ---------- */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.32em) rotate(3deg);
+  }
+}
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes hero-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+.hero-char {
+  /* `backwards` only: once it ends, Motion owns the transform (gravity egg). */
+  animation: hero-rise 0.9s var(--ease-out) backwards;
+  animation-delay: calc(var(--i) * 30ms + 60ms);
+}
+.hero-in {
+  animation: hero-up 0.8s var(--ease-out) backwards;
+  animation-delay: var(--delay, 0.45s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-char,
+  .hero-in {
+    animation: hero-fade 0.4s ease backwards;
+    animation-delay: 0s;
+  }
+}
+
+/* Side gutter that also clears a phone's side system bars (landscape notch). */
+@utility page-gutter {
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  @variant sm {
+    padding-left: max(1.5rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.5rem, env(safe-area-inset-right, 0px));
+  }
+}
+
+/* Text pressed into the paper (data-emboss). Until the embossed canvas is
+   ready, or without WebGL, it is faint ink; then the ink dries away and only
+   the relief, lit by the cursor, shows it. */
+[data-emboss] {
+  color: color-mix(in oklab, var(--foreground) 22%, transparent);
+  transition: color 900ms ease;
+}
+:root[data-paper="ready"] [data-emboss] {
+  color: transparent;
+}
+:root.blueprint[data-paper="ready"] [data-emboss] {
+  color: rgb(255 255 255 / 0.5);
+}
